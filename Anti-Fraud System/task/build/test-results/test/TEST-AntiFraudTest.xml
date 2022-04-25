@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="AntiFraudTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-04-24T02:10:31" hostname="AJITGOEL" time="4.046">
+  <properties/>
+  <testcase name="start" classname="AntiFraudTest" time="4.046"/>
+  <system-out><![CDATA[?[1;31m
+Start test 1?[0m
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.3.1.RELEASE)
+
+2022-04-23 21:10:32.178  INFO 4616 --- [    Test worker] antifraud.AntiFraudApplication           : Starting AntiFraudApplication on AjitGoel with PID 4616 (started by Ajit Goel in C:\Users\AjitGoel\IdeaProjects\Anti-Fraud System\Anti-Fraud System\task)
+2022-04-23 21:10:32.183  INFO 4616 --- [    Test worker] antifraud.AntiFraudApplication           : No active profile set, falling back to default profiles: default
+2022-04-23 21:10:33.851  INFO 4616 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 28852 (http)
+2022-04-23 21:10:33.863  INFO 4616 --- [    Test worker] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-04-23 21:10:33.864  INFO 4616 --- [    Test worker] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.36]
+2022-04-23 21:10:33.968  INFO 4616 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-04-23 21:10:33.969  INFO 4616 --- [    Test worker] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1722 ms
+2022-04-23 21:10:34.331  INFO 4616 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-04-23 21:10:34.717  INFO 4616 --- [    Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 14 endpoint(s) beneath base path '/actuator'
+2022-04-23 21:10:34.787  INFO 4616 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 28852 (http) with context path ''
+2022-04-23 21:10:34.804  INFO 4616 --- [    Test worker] antifraud.AntiFraudApplication           : Started AntiFraudApplication in 3.089 seconds (JVM running for 3.967)
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = 1'
+Expectations: 'Result validating of Transaction must be 'ALLOWED''
+-----
+2022-04-23 21:10:35.185  INFO 4616 --- [io-28852-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-04-23 21:10:35.186  INFO 4616 --- [io-28852-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-04-23 21:10:35.194  INFO 4616 --- [io-28852-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 8 ms
+?[1;31m
+Start test 2?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = 199'
+Expectations: 'Result validating of Transaction must be 'ALLOWED''
+-----
+?[1;31m
+Start test 3?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = 200'
+Expectations: 'Result validating of Transaction must be 'ALLOWED''
+-----
+?[1;31m
+Start test 4?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = 201'
+Expectations: 'Result validating of Transaction must be 'MANUAL_PROCESSING''
+-----
+?[1;31m
+Start test 5?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = 1499'
+Expectations: 'Result validating of Transaction must be 'MANUAL_PROCESSING''
+-----
+?[1;31m
+Start test 6?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = 1500'
+Expectations: 'Result validating of Transaction must be 'MANUAL_PROCESSING''
+-----
+?[1;31m
+Start test 7?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = 1501'
+Expectations: 'Result validating of Transaction must be 'PROHIBITED''
+-----
+?[1;31m
+Start test 8?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = 2000'
+Expectations: 'Result validating of Transaction must be 'PROHIBITED''
+-----
+?[1;31m
+Start test 9?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = -1'
+Expectations: 'Response status must be 'Bad request''
+-----
+?[1;31m
+Start test 10?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = 0'
+Expectations: 'Response status must be 'Bad request''
+-----
+?[1;31m
+Start test 11?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = null'
+Expectations: 'Response status must be 'Bad request''
+-----
+?[1;31m
+Start test 12?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = ""'
+Expectations: 'Response status must be 'Bad request''
+-----
+?[1;31m
+Start test 13?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'amount = " "'
+Expectations: 'Response status must be 'Bad request''
+-----
+?[1;31m
+Start test 14?[0m
+Test case
+Testing api: '/api/antifraud/transaction'
+request: 'empty body'
+Expectations: 'Response status must be 'Bad request''
+-----
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

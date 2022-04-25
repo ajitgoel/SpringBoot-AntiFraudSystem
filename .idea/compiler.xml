@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="17">
+      <module name="Anti-Fraud_System.Anti-Fraud_System-task-build-classes-java.main" target="11" />
+      <module name="Anti-Fraud_System.Anti-Fraud_System-task-build-generated-sources-annotationProcessor-java.main" target="11" />
+      <module name="Anti-Fraud_System.Anti-Fraud_System-task-build-generated-sources-headers-java.main" target="11" />
+      <module name="Anti-Fraud_System.Anti-Fraud_System-task-build-reports-tests.main" target="11" />
+      <module name="Anti-Fraud_System.Anti-Fraud_System-task-build-test-results.main" target="11" />
+      <module name="Anti-Fraud_System.Anti-Fraud_System-task-build-tmp.main" target="11" />
+      <module name="Anti-Fraud_System.Anti-Fraud_System-task-out.main" target="11" />
+      <module name="Anti-Fraud_System.Anti-Fraud_System-task.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Custom_threads-Starting_runnables.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Custom_threads-Theory.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Custom_threads-When_will_a_thread_start_performing_a_task.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Introduction_to_generic_programming-Correct_the_program.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Introduction_to_generic_programming-Pastry_packing_optimization.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Introduction_to_generic_programming-Theory.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Introduction_to_generic_programming-Type_arguments.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Introduction_to_generic_programming-Type_arguments_-_2.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Lambda_expressions-Apply_function_to_all_elements.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Lambda_expressions-Creating_a_closure.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Lambda_expressions-Higher-order_functions.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Lambda_expressions-Theory.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-The_Map_interface-Creating_a_map.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-The_Map_interface-Theory.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Thread_management-Ordering_the_execution_of_threads.main" target="11" />
+      <module name="Anti-Fraud_System.Topics-Thread_management-Theory.main" target="11" />
+      <module name="Anti-Fraud_System.util.main" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
