@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -28,8 +29,8 @@ public class AuthController {
             User result1 = userRepository.findByusername(user.getUsername());
             if(result1!=null)
             {
-                throw new ResponseStatusException(HttpStatus.CONFLICT,
-                        "Username "+ user.getUsername() + " already exists");
+                return new ResponseEntity<>("Username "+ user.getUsername() + " already exists",
+                        HttpStatus.CONFLICT);
             }
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User result2 = userRepository.save(user);
@@ -45,7 +46,13 @@ public class AuthController {
     }
     @GetMapping("/list")
     ResponseEntity<List<User>> all() {
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAll().stream().map(x->{
+            User user=new User();
+            user.setUsername(x.getUsername());
+            user.setName(x.getName());
+            user.setId(x.getId());
+            return user;
+        }).collect(Collectors.toList());
         if((long) users.size() ==0)
         {
             return new ResponseEntity<>(users, HttpStatus.OK);
