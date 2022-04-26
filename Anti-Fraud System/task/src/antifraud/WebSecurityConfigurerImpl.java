@@ -6,23 +6,26 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.springframework.web.bind.annotation.PostMapping;
 
 // Extending the adapter and adding the annotation
 @EnableWebSecurity
 public class WebSecurityConfigurerImpl extends WebSecurityConfigurerAdapter{
+    final UserDetailsService userDetailsService;
+    public WebSecurityConfigurerImpl(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
     @Override
-    public void configure(HttpSecurity http) throws Exception {
+    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder.userDetailsService(this.userDetailsService).passwordEncoder(getEncoder());
+    }
+    @Override
+    public void configure(HttpSecurity httpSecurity) throws Exception {
         RestAuthenticationEntryPoint restAuthenticationEntryPoint= new RestAuthenticationEntryPoint();
-        http.httpBasic()
+        httpSecurity.httpBasic()
                 .authenticationEntryPoint(restAuthenticationEntryPoint) // Handles auth error
                 .and()
                 .csrf().disable().headers().frameOptions().disable() // for Postman, the H2 console
@@ -30,9 +33,14 @@ public class WebSecurityConfigurerImpl extends WebSecurityConfigurerAdapter{
                 .authorizeRequests() // manage access
                 .antMatchers(HttpMethod.POST, "/api/auth/user").permitAll()
                 .antMatchers("/actuator/shutdown").permitAll() // needs to run test
+                .anyRequest().authenticated()
                 // other matchers
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // no session
+    }
+    @Bean
+    public PasswordEncoder getEncoder(){
+        return new BCryptPasswordEncoder();
     }
 }

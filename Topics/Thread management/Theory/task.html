@@ -4,7 +4,7 @@
  <body>
   <p>We've already learned how to start a new thread by simply invoking the <code class="language-java">start</code> method on a corresponding object. However, sometimes it is necessary to manage the lifecycle of a thread while it's working rather than just start it and leave it be.</p> 
   <p>In this topic we will consider two commonly used methods in multithreading programming: <code class="language-java">sleep()</code> and <code class="language-java">join()</code>. Both methods may throw a checked <code class="language-java">InterruptedException</code> that is omitted here for brevity.</p> 
-  <h5 style="text-align: center;">Sleeping</h5> 
+  <h5 style="text-align: center;" id="sleeping">Sleeping</h5> 
   <p>The static method <code class="language-java">Thread.sleep()</code> causes the currently executing thread to suspend execution for the specified number of milliseconds. This is an efficient means of making processor time available for the other threads of an application or other applications that might be running on a computer.</p> 
   <p>We will often use this method throughout our educational platform to simulate expensive calls and difficult tasks.</p> 
   <pre><code class="language-java">System.out.println("Started");
@@ -19,7 +19,7 @@ System.out.println("Finished");</code></pre>
    <li><code class="language-java">TimeUnit.SECONDS.sleep(2)</code> performs <code class="language-java">Thread.sleep</code> for 2 seconds;</li> 
   </ul> 
   <p>There are more existing periods: <code class="language-java">NANOSECONDS</code>, <code class="language-java">MICROSECONDS</code>, <code class="language-java">MILLISECONDS</code>, <code class="language-java">SECONDS</code>, <code class="language-java">MINUTES</code>, <code class="language-java">HOURS</code>, <code class="language-java">DAYS</code>.</p> 
-  <h5 style="text-align: center;">Joining</h5> 
+  <h5 style="text-align: center;" id="joining">Joining</h5> 
   <p>The <code class="language-java">join</code> method forces the current thread to wait for the completion of another thread on which the method was called. In the following example, the string <strong>"do something else"</strong> will not be printed until the thread terminates.</p> 
   <pre><code class="language-java">Thread thread = ...
 thread.start(); // start thread

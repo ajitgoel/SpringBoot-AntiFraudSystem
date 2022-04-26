@@ -532,10 +532,19 @@ files:
 - name: src/antifraud/RestAuthenticationEntryPoint.java
   visible: true
   learner_created: true
-- name: src/antifraud/UserDetailsService.java
+- name: src/antifraud/AuthController.java
   visible: true
   learner_created: true
-- name: src/antifraud/AuthController.java
+- name: src/antifraud/User.java
+  visible: true
+  learner_created: true
+- name: src/antifraud/UserRepository.java
+  visible: true
+  learner_created: true
+- name: src/antifraud/UserDetailsServiceImpl.java
+  visible: true
+  learner_created: true
+- name: src/antifraud/UserDetailsImpl.java
   visible: true
   learner_created: true
 - name: src/antifraud/models/LoginUserRequest.java
