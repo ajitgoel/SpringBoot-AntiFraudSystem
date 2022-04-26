@@ -1,5 +1,5 @@
 package antifraud;
-
+import java.util.Set;
 import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,8 +13,11 @@ public class User{
     @NotBlank(message = "Name is mandatory")
     private String name;
     @NotBlank(message = "User name is mandatory")
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
     @NotBlank(message = "Password is mandatory")
     private String password;
+	@ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_privileges", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
+    private Set<Privilege> privileges;
 }

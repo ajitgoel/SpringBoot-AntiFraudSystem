@@ -22,14 +22,16 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
     @PostMapping("/user")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody User user) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User user){
         try{
             user.setUsername(user.getUsername().toLowerCase());
             User result1 = userRepository.findByUserName(user.getUsername());
             if(result1!=null)
             {
-                throw new ResponseStatusException(HttpStatus.CONFLICT);
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "Username "+ user.getUsername() + " already exists");
             }
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             User result2 = userRepository.save(user);
             Map<String,Object> map = new HashMap<>(3);
             map.put("id", result2.getId());
