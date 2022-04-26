@@ -25,7 +25,7 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user){
         try{
             user.setUsername(user.getUsername().toLowerCase());
-            User result1 = userRepository.findByUserName(user.getUsername());
+            User result1 = userRepository.findByusername(user.getUsername());
             if(result1!=null)
             {
                 throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -57,7 +57,7 @@ public class AuthController {
     @DeleteMapping("/user/{username}")
     ResponseEntity<Map<String,String>> deleteEmployee(@PathVariable @NotBlank String username) {
         username=username.toLowerCase();
-        User user = userRepository.findByUserName(username);
+        User user = userRepository.findByusername(username);
         if(user==null)
         {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
