@@ -1,20 +1,5 @@
 type: edu
 files:
-- name: src/antifraud/AntiFraudApplication.java
-  visible: true
-  text: |-
-    package antifraud;
-
-    import org.springframework.boot.SpringApplication;
-    import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-    @SpringBootApplication
-    public class AntiFraudApplication {
-        public static void main(String[] args) {
-            SpringApplication.run(AntiFraudApplication.class, args);
-        }
-    }
-  learner_created: false
 - name: build.gradle
   visible: true
   text: |-
@@ -484,75 +469,6 @@ files:
         };
     }
   learner_created: false
-- name: src/antifraud/AntiFraudController.java
-  visible: true
-  text: |
-    package antifraud;
-
-    import org.springframework.http.HttpStatus;
-    import org.springframework.http.ResponseEntity;
-    import org.springframework.web.bind.annotation.PostMapping;
-    import org.springframework.web.bind.annotation.RequestBody;
-    import org.springframework.web.bind.annotation.RequestMapping;
-    import org.springframework.web.bind.annotation.RestController;
-    import org.springframework.web.server.ResponseStatusException;
-
-    import java.util.HashMap;
-    import java.util.Map;
-
-    import static org.springframework.http.HttpStatus.BAD_REQUEST;
-
-    @RestController
-    @RequestMapping("/api/antifraud")
-    public class AntiFraudController {
-        @PostMapping("/transaction")
-        public Map<String, String> transaction(@RequestBody Map<String, Long> transactionRequest) {
-            HashMap<String, String> map = new HashMap<>();
-            if (transactionRequest==null || transactionRequest.get("amount")== null|| transactionRequest.get("amount") <=0) {
-                throw new ResponseStatusException(BAD_REQUEST);
-            }
-            if (transactionRequest.get("amount")>0 && transactionRequest.get("amount") <= 200) {
-                map.put("result", "ALLOWED");
-                return map;
-            }
-            if (transactionRequest.get("amount") > 200 && transactionRequest.get("amount") <= 1500) {
-                map.put("result", "MANUAL_PROCESSING");
-                return map;
-            }
-            else {
-                map.put("result", "PROHIBITED");
-                return map;
-            }
-        }
-    }
-  learner_created: true
-- name: src/antifraud/WebSecurityConfigurerImpl.java
-  visible: true
-  learner_created: true
-- name: src/antifraud/RestAuthenticationEntryPoint.java
-  visible: true
-  learner_created: true
-- name: src/antifraud/AuthController.java
-  visible: true
-  learner_created: true
-- name: src/antifraud/User.java
-  visible: true
-  learner_created: true
-- name: src/antifraud/UserRepository.java
-  visible: true
-  learner_created: true
-- name: src/antifraud/UserDetailsServiceImpl.java
-  visible: true
-  learner_created: true
-- name: src/antifraud/UserDetailsImpl.java
-  visible: true
-  learner_created: true
-- name: src/antifraud/models/LoginUserRequest.java
-  visible: true
-  learner_created: true
-- name: src/antifraud/models/LoginUserResponse.java
-  visible: true
-  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/18068#comment
 status: Unchecked
 record: -1

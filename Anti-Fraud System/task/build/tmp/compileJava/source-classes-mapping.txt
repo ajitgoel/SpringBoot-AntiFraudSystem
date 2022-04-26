@@ -1,0 +1,18 @@
+antifraud/User.java
+ antifraud.User
+antifraud/AntiFraudController.java
+ antifraud.AntiFraudController
+antifraud/AuthController.java
+ antifraud.AuthController
+antifraud/RestAuthenticationEntryPoint.java
+ antifraud.RestAuthenticationEntryPoint
+antifraud/UserRepository.java
+ antifraud.UserRepository
+antifraud/UserDetailsServiceImpl.java
+ antifraud.UserDetailsServiceImpl
+antifraud/UserDetailsImpl.java
+ antifraud.UserDetailsImpl
+antifraud/WebSecurityConfigurerImpl.java
+ antifraud.WebSecurityConfigurerImpl
+antifraud/AntiFraudApplication.java
+ antifraud.AntiFraudApplication
