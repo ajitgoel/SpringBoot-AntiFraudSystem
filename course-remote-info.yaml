@@ -3,7 +3,7 @@ hyperskill_project:
   ide_files: https://stepik.org/media/attachments/lesson/657120/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: Tue, 26 Apr 2022 03:16:32 UTC
+update_date: Tue, 26 Apr 2022 13:42:45 UTC
 stages:
 - id: 1161
   step: 18067
@@ -77,6 +77,8 @@ topics:
     theory_id: 13334
   - title: Computer programming
     theory_id: 8739
+  - title: Paradigms
+    theory_id: 15860
   - title: Introduction to Java
     theory_id: 3500
   - title: Basic literals
@@ -161,14 +163,16 @@ topics:
     theory_id: 3552
   - title: Web development
     theory_id: 13931
+  - title: Build tools
+    theory_id: 4284
+  - title: External resources
+    theory_id: 6216
   - title: Command line overview
     theory_id: 8977
   - title: Parameters and Options
     theory_id: 9746
   - title: Java Archive
     theory_id: 4311
-  - title: Build tools
-    theory_id: 4284
   - title: Gradle basics
     theory_id: 5075
   - title: Basic project with Gradle
@@ -177,8 +181,6 @@ topics:
     theory_id: 7917
   - title: Dependency management
     theory_id: 5076
-  - title: External resources
-    theory_id: 6216
   - title: Pseudocode
     theory_id: 15090
   - title: Fixed-size array
