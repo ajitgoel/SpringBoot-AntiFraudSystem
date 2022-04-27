@@ -1,4 +1,5 @@
 package antifraud;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,7 +26,16 @@ public class User{
     private String password;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_privileges", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
+    @JoinTable(name = "users_privileges",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Privilege> privileges;
+
+	@ManyToOne
+    @JoinColumn(name="role_id", nullable=false)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private Operation lockedstatus;
 }

@@ -18,8 +18,11 @@ import java.util.stream.Collectors;
 public class AuthController {
     final UserRepository userRepository;
     final PasswordEncoder passwordEncoder;
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    private RoleRepository roleRepository;
+
+    public AuthController(UserRepository userRepository, RoleRepository roleRepository,PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
     @PostMapping("/user")
@@ -51,6 +54,7 @@ public class AuthController {
             user.setUsername(x.getUsername());
             user.setName(x.getName());
             user.setId(x.getId());
+            user.setRole(x.getRole());
             return user;
         }).collect(Collectors.toList());
         if((long) users.size() ==0)
@@ -61,13 +65,45 @@ public class AuthController {
         users.sort(compareById);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+    @PutMapping("/role")
+    ResponseEntity<User> changeUserRole(@RequestBody ChangeUserRoleRequest changeUserRoleRequest) {
+        String role=changeUserRoleRequest.getRole();
+        if(role!=Role.SUPPORT && role!=Role.MERCHANT)
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        Role roleResult = roleRepository.findByname(role);
+        if(roleResult==null)
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,role+ " is not a valid role");
+        }
+        String username=changeUserRoleRequest.getUsername().toLowerCase();
+        User userResult = userRepository.findByusername(username);
+        if(userResult==null)
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User with " +username+ " user name was not found");
+        }
+        if(userResult.getRole().getName()==role)
+        {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
+        userResult.setRole(roleResult);
+        userRepository.save(userResult);
+
+        User user=new User();
+        user.setId(userResult.getId());
+        user.setName(userResult.getName());
+        user.setUsername(userResult.getUsername());
+        user.setRole(userResult.getRole());
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
     @DeleteMapping("/user/{username}")
-    ResponseEntity<Map<String,String>> deleteEmployee(@PathVariable @NotBlank String username) {
+    ResponseEntity<Map<String,String>> deleteUser(@PathVariable @NotBlank String username) {
         username=username.toLowerCase();
         User user = userRepository.findByusername(username);
         if(user==null)
         {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User with " +username+ " user name was not found");
         }
         userRepository.delete(user);
         Map<String,String> map = new HashMap<>(2);
