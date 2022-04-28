@@ -36,6 +36,5 @@ public class User{
     @JoinColumn(name="role_id")
     private Role role;
 
-    @Enumerated(EnumType.STRING)
-    private Operation lockedstatus;
+    private String lockedstatus;
 }

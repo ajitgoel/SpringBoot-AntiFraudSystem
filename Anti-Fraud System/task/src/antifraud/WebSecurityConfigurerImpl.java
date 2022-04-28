@@ -3,6 +3,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,6 +23,10 @@ public class WebSecurityConfigurerImpl extends WebSecurityConfigurerAdapter{
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(this.userDetailsService).passwordEncoder(getEncoder());
     }
+    /*@Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/h2-console/**");
+    }*/
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
         RestAuthenticationEntryPoint restAuthenticationEntryPoint= new RestAuthenticationEntryPoint();
@@ -31,6 +36,9 @@ public class WebSecurityConfigurerImpl extends WebSecurityConfigurerAdapter{
                 .csrf().disable().headers().frameOptions().disable() // for Postman, the H2 console
                 .and()
                 .authorizeRequests() // manage access
+                /*.antMatchers("/").permitAll().and()
+                .authorizeRequests()
+                .antMatchers("/h2-console/**").permitAll()*/
                 .antMatchers(HttpMethod.POST, "/api/auth/user").permitAll()
                 .antMatchers("/actuator/shutdown").permitAll() // needs to run test
                 .anyRequest().authenticated()

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class AuthController {
     final UserRepository userRepository;
     final PasswordEncoder passwordEncoder;
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     public AuthController(UserRepository userRepository, RoleRepository roleRepository,PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -39,17 +39,17 @@ public class AuthController {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
 
             //region role, operation
-            Role role=null;
-            Operation operation=null;
-            if(userRepository.existsByrole(Role.ADMINISTRATORRole))
+            Role role;
+            String operation;
+            if(!userRepository.existsByrole(Role.ADMINISTRATORRole))
             {
                 role=Role.ADMINISTRATORRole;
-                operation=Operation.Unlocked;
+                operation=LockUnlockUserRequest.UnlockOperation;
             }
             else
             {
                 role=Role.MERCHANTRole;
-                operation=Operation.Locked;
+                operation=LockUnlockUserRequest.LockOperation;
             }
             user.setRole(role);
             user.setLockedstatus(operation);
@@ -71,28 +71,29 @@ public class AuthController {
     @GetMapping("/list")
     //@PreAuthorize("hasAnyRole(\""+Role.ADMINISTRATOR+"\", \""+Role.SUPPORT+"\")")
     @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'SUPPORT')")
-    ResponseEntity<List<User>> all() {
-        List<User> users = userRepository.findAll().stream().map(x->{
-            User user=new User();
-            user.setUsername(x.getUsername());
-            user.setName(x.getName());
-            user.setId(x.getId());
-            user.setRole(x.getRole());
-            return user;
+    ResponseEntity<List<UserResponse>> all() {
+        List<UserResponse> users = userRepository.findAll().stream().map(x->{
+            UserResponse listUserResponse=new UserResponse();
+            listUserResponse.setUsername(x.getUsername());
+            listUserResponse.setName(x.getName());
+            listUserResponse.setId(x.getId());
+            listUserResponse.setRole(x.getRole()==null?null:x.getRole().getName());
+            return listUserResponse;
         }).collect(Collectors.toList());
         if((long) users.size() ==0)
         {
             return new ResponseEntity<>(users, HttpStatus.OK);
         }
-        Comparator<User> compareById = Comparator.comparing(User::getId);
+        Comparator<UserResponse> compareById =
+                Comparator.comparing(UserResponse::getId);
         users.sort(compareById);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @PutMapping("/role")
-    ResponseEntity<User> changeUserRole(@RequestBody ChangeUserRoleRequest changeUserRoleRequest) {
+    ResponseEntity<UserResponse> changeUserRole(@RequestBody ChangeUserRoleRequest changeUserRoleRequest) {
         String role=changeUserRoleRequest.getRole();
-        if(role!=Role.SUPPORT && role!=Role.MERCHANT)
+        if(!role.equals(Role.SUPPORT) && !role.equals(Role.MERCHANT))
         {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -107,25 +108,25 @@ public class AuthController {
         {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User with " +username+ " user name was not found");
         }
-        if(userResult.getRole().getName()==role)
+        if(userResult.getRole().getName().equals(role))
         {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
         userResult.setRole(roleResult);
         userRepository.save(userResult);
 
-        User user=new User();
+        UserResponse user=new UserResponse();
         user.setId(userResult.getId());
         user.setName(userResult.getName());
         user.setUsername(userResult.getUsername());
-        user.setRole(userResult.getRole());
+        user.setRole(userResult.getRole()==null?null:userResult.getRole().getName());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("/access")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     ResponseEntity<Map<String,String>> lockUnlockUser(@RequestBody LockUnlockUserRequest lockUnlockUserRequest) {
-        Operation operation=lockUnlockUserRequest.getOperation();
+        String operation=lockUnlockUserRequest.getOperation();
         String username=lockUnlockUserRequest.getUsername().toLowerCase();
         User userResult = userRepository.findByusername(username);
         if(userResult==null)
@@ -133,7 +134,7 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "User with " +username+ " user name was not found");
         }
-        if(userResult.getRole().getName()==Role.ADMINISTRATOR)
+        if(userResult.getRole().getName().equals(Role.ADMINISTRATOR))
         {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "User with administrator role cannot be blocked");
@@ -142,7 +143,7 @@ public class AuthController {
         userRepository.save(userResult);
 
         Map<String,String> map = new HashMap<>(1);
-        map.put("status", "User " +userResult.getUsername()+ " " +userResult.getLockedstatus().name()+"!");
+        map.put("status", "User " +userResult.getUsername()+ " " +userResult.getLockedstatus()+"!");
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
