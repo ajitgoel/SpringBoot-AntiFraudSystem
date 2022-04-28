@@ -1,4 +1,5 @@
 package antifraud;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestController
 @RequestMapping("/api/antifraud")
+@PreAuthorize("hasRole('MERCHANT')")
 public class AntiFraudController {
     @PostMapping("/transaction")
     public Map<String, String> transaction(@RequestBody Map<String, Long> transactionRequest) {

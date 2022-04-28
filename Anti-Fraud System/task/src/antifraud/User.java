@@ -33,7 +33,7 @@ public class User{
     private Set<Privilege> privileges;
 
 	@ManyToOne
-    @JoinColumn(name="role_id", nullable=false)
+    @JoinColumn(name="role_id")
     private Role role;
 
     @Enumerated(EnumType.STRING)

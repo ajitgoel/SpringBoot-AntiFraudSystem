@@ -2,6 +2,7 @@ package antifraud;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,18 +37,40 @@ public class AuthController {
                         HttpStatus.CONFLICT);
             }
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+            //region role, operation
+            Role role=null;
+            Operation operation=null;
+            if(userRepository.existsByrole(Role.ADMINISTRATORRole))
+            {
+                role=Role.ADMINISTRATORRole;
+                operation=Operation.Unlocked;
+            }
+            else
+            {
+                role=Role.MERCHANTRole;
+                operation=Operation.Locked;
+            }
+            user.setRole(role);
+            user.setLockedstatus(operation);
+            //endregion role, operation
+
             User result2 = userRepository.save(user);
-            Map<String,Object> map = new HashMap<>(3);
+            Map<String,Object> map = new HashMap<>(4);
             map.put("id", result2.getId());
             map.put("name", result2.getName());
             map.put("username", result2.getUsername());
+            map.put("role", result2.getRole().getName());
             return new ResponseEntity<>(map,HttpStatus.CREATED);
         }
         catch (Exception exception){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
+
     @GetMapping("/list")
+    //@PreAuthorize("hasAnyRole(\""+Role.ADMINISTRATOR+"\", \""+Role.SUPPORT+"\")")
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'SUPPORT')")
     ResponseEntity<List<User>> all() {
         List<User> users = userRepository.findAll().stream().map(x->{
             User user=new User();
@@ -65,6 +88,7 @@ public class AuthController {
         users.sort(compareById);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
     @PutMapping("/role")
     ResponseEntity<User> changeUserRole(@RequestBody ChangeUserRoleRequest changeUserRoleRequest) {
         String role=changeUserRoleRequest.getRole();
@@ -97,7 +121,33 @@ public class AuthController {
         user.setRole(userResult.getRole());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
+    @PutMapping("/access")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    ResponseEntity<Map<String,String>> lockUnlockUser(@RequestBody LockUnlockUserRequest lockUnlockUserRequest) {
+        Operation operation=lockUnlockUserRequest.getOperation();
+        String username=lockUnlockUserRequest.getUsername().toLowerCase();
+        User userResult = userRepository.findByusername(username);
+        if(userResult==null)
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "User with " +username+ " user name was not found");
+        }
+        if(userResult.getRole().getName()==Role.ADMINISTRATOR)
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "User with administrator role cannot be blocked");
+        }
+        userResult.setLockedstatus(operation);
+        userRepository.save(userResult);
+
+        Map<String,String> map = new HashMap<>(1);
+        map.put("status", "User " +userResult.getUsername()+ " " +userResult.getLockedstatus().name()+"!");
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
     @DeleteMapping("/user/{username}")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     ResponseEntity<Map<String,String>> deleteUser(@PathVariable @NotBlank String username) {
         username=username.toLowerCase();
         User user = userRepository.findByusername(username);
@@ -111,6 +161,7 @@ public class AuthController {
         map.put("status", "Deleted successfully!");
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
